@@ -15,7 +15,7 @@ class TmdbSpider(scrapy.Spider):
         '''
         
         # hardcode the link to the full cast & crew page
-        link = response.url + '/cast'
+        link = response.url + '/cast/'
 
         # use scrapy.Request() to naviage to the page
         yield scrapy.Request(link, callback=self.parse_full_credits)
@@ -28,8 +28,8 @@ class TmdbSpider(scrapy.Spider):
         '''
 
         # use response.css to filter out the crew and save only the cast
-        actors = response.css("ol.people.credits:not(ol.people.credits.crew) li a")
-        links = [a.attrib['href'] for a in actors]
+        cast = response.css("ol.people.credits:not(ol.people.credits.crew)")
+        links = cast.css("li div.info a::attr(href)").getall()
         
         # genearte the full urls
         for link in links:
@@ -44,16 +44,9 @@ class TmdbSpider(scrapy.Spider):
         '''
 
         # get the name of the actor and the names of all movies or tv shows
-        actor_name = response.css("h2.title a::text").get()
-        movie_or_TV_names = response.css("h3:contains('Acting') + table.card.credits a.tooltip bdi::text").getall()
+        actor_name = response.css("div.title h2 a::text").get()
+        movie_or_TV_names = response.css("h3.zero + table.card.credits a.tooltip bdi::text").getall()
 
         # yield the names
         for movie_or_TV_name in movie_or_TV_names:
             yield {"actor" : actor_name, "movie_or_TV_name" : movie_or_TV_name}
-
-
-    
-
-
-
-
