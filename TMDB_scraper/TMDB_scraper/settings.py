@@ -11,7 +11,7 @@ BOT_NAME = 'TMDB_scraper'
 
 SPIDER_MODULES = ['TMDB_scraper.spiders']
 NEWSPIDER_MODULE = 'TMDB_scraper.spiders'
-
+CLOSESPIDER_PAGECOUNT = 20
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'TMDB_scraper (+http://www.yourdomain.com)'
